@@ -1,0 +1,38 @@
+---
+- hosts: webservers
+  become: yes
+  vars:
+    - Mymessage: "Welcome to webservers"
+  
+  tasks:
+    - name: ensure to install nginx is at the latest version 
+      apt: name=nginx state=latest update_cache=yes
+    
+    - name: ensure to nginx start
+      service:
+        name: nginx
+        state: started
+    - name: ensure to copy and configure nginx
+      copy: dest=/etc/nginx/sites-available/default
+            src=./templates/default
+    - name: ensure to copy and configure php files
+      copy: dest=/var/www/html/index.php
+            src=./templates/index.php
+    - name: ensure list of php packages are at the latest version
+      apt: name={{ item }} state=latest update_cache=yes
+      with_items:
+        - php
+        - php-fpm
+    - name: ensure nginx restart
+      service:
+        name: nginx
+        state: restarted
+- hosts: haproxy
+  become: yes
+  vars:
+   - Mymessage: "Welcome to haproxy loadbalancer"
+  
+  tasks:
+   - name: ensure to install haproxy is at the latest version
+     apt: name=haproxy state=latest update_cache=yes
+  
