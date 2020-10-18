@@ -1,12 +1,12 @@
 frontend http80
     bind *:80
     timeout client 10000ms
-    mode {{ haproxy_mode }}
-    default_backend {{ haproxy_backend_servers }}
+    mode http
+    default_backend backend_servers
 
-backend {{ haproxy_backend_servers }}
-    balance {{ haproxy_algorithm }}
-    mode {{ haproxy_mode }}
+backend backend_servers
+    balance {{ algorithm }}
+    mode http
     timeout connect 10000ms
     timeout server 300000ms
     retries 3
