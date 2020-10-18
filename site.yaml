@@ -20,3 +20,8 @@
     - name: ensure to copy and configure php files
       copy: dest=/var/www/html/index.php
             src=./index.php
+            
+    - name: ensure nginx restart
+      service:
+        name: nginx
+        state: restarted
