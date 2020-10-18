@@ -20,8 +20,16 @@
     - name: ensure to copy and configure php files
       copy: dest=/var/www/html/index.php
             src=./index.php
-            
+
     - name: ensure nginx restart
       service:
         name: nginx
         state: restarted
+        
+- hosts: haproxy
+  become: yes
+  vars:
+    Mymessage: "Welcome to haproxy loadbalancer"
+    haproxy_mode: http
+    haproxy_algorithm:  roundrobin
+    haproxy_backend_servers: backend_servers
