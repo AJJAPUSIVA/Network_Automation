@@ -25,7 +25,7 @@
       service:
         name: nginx
         state: restarted
-        
+
 - hosts: haproxy
   become: yes
   vars:
@@ -33,3 +33,14 @@
     haproxy_mode: http
     haproxy_algorithm:  roundrobin
     haproxy_backend_servers: backend_servers
+
+  tasks:
+    - name: ensure to  Install HAProxy 
+      apt: 
+        name: haproxy 
+        state:  present
+    
+    - name: ensure to copy HAProxy Configuration File 
+      template:
+        src:  haproxy.cfg.j2
+        dest: /etc/haproxy/haproxy.cfg
