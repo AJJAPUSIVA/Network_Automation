@@ -53,9 +53,9 @@
       args:
         warn: no
     - debug: 
-        msg:  "{{test.results[0].stdout}}"
-    - debug: 
-        msg:  "{{test.results[1].stdout}}"
-    - debug: 
-        msg:  "{{test.results[2].stdout}}"
+        msg:  [ "{{test.results[0].stdout}}", "{{test.results[1].stdout}}", "{{test.results[2].stdout}}" ]
+    #- debug: 
+     #   msg:  "{{test.results[1].stdout}}"
+    #- debug: 
+     #   msg:  "{{test.results[2].stdout}}"
 
