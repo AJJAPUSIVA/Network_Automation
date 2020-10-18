@@ -30,10 +30,8 @@
   become: yes
   vars:
     Mymessage: "Welcome to haproxy loadbalancer"
-    haproxy_mode: http
-    haproxy_algorithm:  roundrobin
-    haproxy_backend_servers: backend_servers
-
+    algorithm:  roundrobin
+    haproxy_host_ipv4_address: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
   tasks:
     - name: ensure to  Install HAProxy 
       apt: 
@@ -44,3 +42,20 @@
       template:
         src:  haproxy.cfg.j2
         dest: /etc/haproxy/haproxy.cfg
+    - name: ensure to restart HAProxy
+      service:  
+        name: haproxy
+        state: restarted
+    - name: ensure to test using rudimentary function
+      command: curl "{{ item }}"
+      with_items: ["{{haproxy_host_ipv4_address}}","{{haproxy_host_ipv4_address}}","{{haproxy_host_ipv4_address}}"]
+      register: test
+      args:
+        warn: no
+    - debug: 
+        msg:  "{{test.results[0].stdout}}"
+    - debug: 
+        msg:  "{{test.results[1].stdout}}"
+    - debug: 
+        msg:  "{{test.results[2].stdout}}"
+
