@@ -121,13 +121,15 @@ To test the haproxy load balancing you run the command `curl <ip>` for 3 times w
 ``` js
 2020-10-19 14:39:41 Welcome to deva|10.6.0.36:80<br>
 ```
-or
+and
 ``` js
 2020-10-19 14:41:29 Welcome to devb|10.6.0.43:80<br>
 ```
+and
 ``` js
 2020-10-19 14:45:33 Welcome to devc|10.6.0.7:80<br>
 ```
+respectively.
 
 
 
