@@ -6,29 +6,29 @@
     - msg: "Welcome to webservers"
   
   tasks:
-    - name: ensure to install nginx is at the latest version 
+    - name: Ensure  Nginx Install  
       apt: name=nginx state=latest update_cache=yes
     
-    - name: ensure to nginx start
+    - name: Ensure Nginx Start
       service:
         name: nginx
         state: started
 
-    - name: ensure to install php and php-fpm
+    - name: Ensure Php and Php-fpm Install
       apt: 
         name: ['php', 'php-fpm']
         update_cache:  yes 
         state: latest
 
-    - name: ensure to copy and configure nginx
+    - name: Ensure Copy Nginx Configuration File
       copy: dest=/etc/nginx/sites-available/default
             src=./default
 
-    - name: ensure to copy and configure php files
+    - name: Ensure Copy Php Configuration File
       copy: dest=/var/www/html/index.php
             src=./index.php
 
-    - name: ensure nginx restart
+    - name: Ensure Nginx restart
       service:
         name: nginx
         state: restarted
@@ -40,29 +40,18 @@
     algorithm:  roundrobin
     haproxy_host_ipv4_address: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
   tasks:
-    - name: ensure to  Install HAProxy 
+    - name: Ensure HAProxy Install
+      become: yes 
       apt: 
         name: haproxy 
         state:  present
     
-    - name: ensure to copy HAProxy Configuration File 
+    - name: Ensure Copy HAProxy Configuration File 
       template:
         src:  haproxy.cfg.j2
         dest: /etc/haproxy/haproxy.cfg
-    - name: ensure to restart haProxy
+    - name: Ensure HAProxy Restart
       service:  
         name: haproxy
         state: restarted
-    #- name: ensure to test using rudimentary function
-     # command: curl "{{ item }}"
-      #with_items: ["{{haproxy_host_ipv4_address}}","{{haproxy_host_ipv4_address}}","{{haproxy_host_ipv4_address}}"]
-      #register: test
-      #args:
-       # warn: no
-    #- debug: 
-      #  msg:  [ "{{test.results[0].stdout}}", "{{test.results[1].stdout}}", "{{test.results[2].stdout}}" ]
-    #- debug: 
-     #   msg:  "{{test.results[1].stdout}}"
-    #- debug: 
-     #   msg:  "{{test.results[2].stdout}}"
-
+    
