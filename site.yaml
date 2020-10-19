@@ -2,7 +2,8 @@
 - hosts: webservers
   become: yes
   vars:
-    - Mymessage: "Welcome to webservers"
+    debug:
+    - msg: "Welcome to webservers"
   
   tasks:
     - name: ensure to install nginx is at the latest version 
@@ -12,6 +13,12 @@
       service:
         name: nginx
         state: started
+
+    - name: ensure to install php and php-fpm
+      apt: 
+        name: ['php', 'php-fpm']
+        update_cache:  yes 
+        state: latest
 
     - name: ensure to copy and configure nginx
       copy: dest=/etc/nginx/sites-available/default
@@ -42,18 +49,18 @@
       template:
         src:  haproxy.cfg.j2
         dest: /etc/haproxy/haproxy.cfg
-    - name: ensure to restart HAProxy
+    - name: ensure to restart haProxy
       service:  
         name: haproxy
         state: restarted
-    - name: ensure to test using rudimentary function
-      command: curl "{{ item }}"
-      with_items: ["{{haproxy_host_ipv4_address}}","{{haproxy_host_ipv4_address}}","{{haproxy_host_ipv4_address}}"]
-      register: test
-      args:
-        warn: no
-    - debug: 
-        msg:  [ "{{test.results[0].stdout}}", "{{test.results[1].stdout}}", "{{test.results[2].stdout}}" ]
+    #- name: ensure to test using rudimentary function
+     # command: curl "{{ item }}"
+      #with_items: ["{{haproxy_host_ipv4_address}}","{{haproxy_host_ipv4_address}}","{{haproxy_host_ipv4_address}}"]
+      #register: test
+      #args:
+       # warn: no
+    #- debug: 
+      #  msg:  [ "{{test.results[0].stdout}}", "{{test.results[1].stdout}}", "{{test.results[2].stdout}}" ]
     #- debug: 
      #   msg:  "{{test.results[1].stdout}}"
     #- debug: 
